@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
+	"github.com/joho/godotenv"
 )
 
 type Client struct {
@@ -15,6 +17,10 @@ type Client struct {
 var clients = make(map[string]*Client)
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Failed to load .env file")
+	}
 	app := fiber.New()
 
 	// Sử dụng middleware WebSocket
