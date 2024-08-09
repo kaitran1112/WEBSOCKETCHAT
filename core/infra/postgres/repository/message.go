@@ -10,8 +10,8 @@ import (
 )
 
 type MessageRepository interface {
-	AddUser(ctx *fiber.Ctx, user entity.Message) error
-	GetUserById(ctx *fiber.Ctx, id uint) (domain.Message, error)
+	AddMessage(ctx *fiber.Ctx, user entity.Message) error
+	GetMessageById(ctx *fiber.Ctx, id uint) (domain.Message, error)
 	GetAll(ctx *fiber.Ctx) (messages []domain.Message, err error)
 	Update(ctx *fiber.Ctx, req entity.Message, id uint) error
 	Delete(ctx *fiber.Ctx, id uint) error
@@ -27,7 +27,7 @@ func NewMessageRepository(DB *gorm.DB) MessageRepository {
 	}
 }
 
-func (u messageRepository) AddUser(ctx *fiber.Ctx, message entity.Message) error {
+func (u *messageRepository) AddMessage(ctx *fiber.Ctx, message entity.Message) error {
 	id := utils.GenerateUniqueKey()
 	messageSaving := domain.Message{
 		ID:             id,
@@ -42,7 +42,7 @@ func (u messageRepository) AddUser(ctx *fiber.Ctx, message entity.Message) error
 	return nil
 }
 
-func (u messageRepository) GetUserById(ctx *fiber.Ctx, id uint) (domain.Message, error) {
+func (u *messageRepository) GetMessageById(ctx *fiber.Ctx, id uint) (domain.Message, error) {
 	var message domain.Message
 	err := u.DB.Find(&message).Error
 	if err != nil {
