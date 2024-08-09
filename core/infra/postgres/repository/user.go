@@ -12,6 +12,7 @@ import (
 type UserRepository interface {
 	AddUser(ctx *fiber.Ctx, user entity.User) error
 	GetUserById(ctx *fiber.Ctx, id uint) (domain.User, error)
+	GetUserByName(ctx *fiber.Ctx, req entity.User) (user domain.User, err error)
 	GetAll(ctx *fiber.Ctx) (users []domain.User, err error)
 	Update(ctx *fiber.Ctx, req entity.User, id uint) error
 	Delete(ctx *fiber.Ctx, id uint) error
@@ -42,8 +43,14 @@ func (u userRepository) AddUser(ctx *fiber.Ctx, user entity.User) error {
 	}
 	return nil
 }
-
-func (u userRepository) GetUserById(ctx *fiber.Ctx, id uint) (domain.User, error) {
+func (u *userRepository) GetUserByName(ctx *fiber.Ctx, req entity.User) (user domain.User, err error) {
+	err = u.DB.First(&user, "firstname=?&&lastname=?", req.FirstName, req.LastName).Error
+	if err != nil {
+		return user, err
+	}
+	return user, nil
+}
+func (u *userRepository) GetUserById(ctx *fiber.Ctx, id uint) (domain.User, error) {
 	var user domain.User
 	err := u.DB.Find(&user).Error
 	if err != nil {
