@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"websocketchat/cmd/app"
 
 	"github.com/joho/godotenv"
 )
@@ -12,7 +13,6 @@ func main() {
 	if err != nil {
 		fmt.Println("Failed to load .env file")
 	}
-	mainApp := NewMainApp()
-
+	mainApp := app.NewMainApp()
 	log.Fatal(mainApp.App.Listen(":3000"))
 }
